@@ -37,7 +37,14 @@ class DefaultTexParserTest {
         assertEquals(expectedParserResult, latexParserResult);
     }
 
-    private void testNonMatchCite(String citeString) {
+    @ParameterizedTest
+    @ValueSource(strings = {
+        "\\citet21312{123U123n123resolvedKey}",
+        "\\1cite[pr234e][post]{UnresolvedKey}",
+        "\\citep55{5}UnresolvedKey}",
+        "\\cit2et{UnresolvedKey}"
+    })
+    void testNonMatchCite(String citeString) {
         LatexParserResult latexParserResult = new DefaultLatexParser().parse(citeString);
         LatexParserResult expectedParserResult = new LatexParserResult(Path.of(""));
 
@@ -61,17 +68,6 @@ class DefaultTexParserTest {
     @MethodSource("matchCiteCommandsProvider")
     void testMatchCiteCommands(String expectedKey, String citeString) {
         testMatchCite(expectedKey, citeString);
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {
-        "\\citet21312{123U123n123resolvedKey}",
-        "\\1cite[pr234e][post]{UnresolvedKey}",
-        "\\citep55{5}UnresolvedKey}",
-        "\\cit2et{UnresolvedKey}"
-    })
-    void testNonMatchCiteCommands(String citeString) {
-        testNonMatchCite(citeString);
     }
 
     @Test
