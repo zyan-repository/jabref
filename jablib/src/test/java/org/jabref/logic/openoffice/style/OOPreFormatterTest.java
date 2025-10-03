@@ -10,65 +10,40 @@ class OOPreFormatterTest {
 
     @ParameterizedTest
     @CsvSource({
+        // plain formatting
         "aaa, aaa",
         "\\$, $",
         "\\%, %",
-        "\\\\, \\"
-    })
-    void plainFormat(String input, String expected) {
-        assertEquals(expected, new OOPreFormatter().format(input));
-    }
-
-    @Test
-    void removeBraces() {
-        assertEquals("aaa", new OOPreFormatter().format("{aaa}"));
-    }
-
-    @ParameterizedTest
-    @CsvSource({
+        "\\\\, \\",
+        
+        // remove braces
+        "{aaa}, aaa",
+        
+        // foreign accents
         "{\\\"{a}}, ä",
         "{\\\"{A}}, Ä",
-        "{\\c{C}}, Ç"
-    })
-    void formatAccents(String input, String expected) {
-        assertEquals(expected, new OOPreFormatter().format(input));
-    }
-
-    @ParameterizedTest
-    @CsvSource({
+        "{\\c{C}}, Ç",
+        
+        // special commands
         "{\\aa}, å",
         "{\\bb}, bb",
         "\\aa a, å a",
         "{\\aa a}, å a",
         "\\aa\\AA, åÅ",
-        "\\bb a, bb a"
-    })
-    void specialCommands(String input, String expected) {
-        assertEquals(expected, new OOPreFormatter().format(input));
-    }
-
-    @ParameterizedTest
-    @CsvSource({
+        "\\bb a, bb a",
+        
+        // unsupported special commands
         "\\ftmch, ftmch",
         "{\\ftmch}, ftmch",
-        "{\\ftmch\\aaa}, ftmchaaa"
-    })
-    void unsupportedSpecialCommands(String input, String expected) {
-        assertEquals(expected, new OOPreFormatter().format(input));
-    }
-
-    @Test
-    void equations() {
-        assertEquals("Σ", new OOPreFormatter().format("$\\Sigma$"));
-    }
-
-    @Test
-    void formatStripLatexCommands() {
-        assertEquals("-", new OOPreFormatter().format("\\mbox{-}"));
-    }
-
-    @ParameterizedTest
-    @CsvSource({
+        "{\\ftmch\\aaa}, ftmchaaa",
+        
+        // equations
+        "$\\Sigma$, Σ",
+        
+        // strip latex commands
+        "\\mbox{-}, -",
+        
+        // formatting commands
         "\\textit{kkk}, <i>kkk</i>",
         "{\\it kkk}, <i>kkk</i>",
         "\\emph{kkk}, <i>kkk</i>",
@@ -80,7 +55,7 @@ class OOPreFormatterTest {
         "\\textsuperscript{kkk}, <sup>kkk</sup>",
         "\\textsubscript{kkk}, <sub>kkk</sub>"
     })
-    void formatting(String input, String expected) {
+    void format(String input, String expected) {
         assertEquals(expected, new OOPreFormatter().format(input));
     }
 }
