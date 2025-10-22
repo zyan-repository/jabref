@@ -110,7 +110,7 @@ public class FromAuxDialogViewModel {
     }
 
     public void addResultToTabContainer() {
-        BibDatabaseContext context = new BibDatabaseContext(auxParserResult.getGeneratedBibDatabase());
+        BibDatabaseContext context = new BibDatabaseContext.Builder().withDatabase(auxParserResult.getGeneratedBibDatabase()).build();
         tabContainer.addTab(context, true);
     }
 

@@ -947,7 +947,7 @@ public class OOBibBase {
 
                     // A separate database and database context
                     BibDatabase bibDatabase = new BibDatabase(citedEntries);
-                    BibDatabaseContext bibDatabaseContext = new BibDatabaseContext(bibDatabase);
+                    BibDatabaseContext bibDatabaseContext = new BibDatabaseContext.Builder().withDatabase(bibDatabase).build();
 
                     // Lock document controllers - disable refresh during the process (avoids document flicker during writing)
                     // MUST always be paired with an unlockControllers() call

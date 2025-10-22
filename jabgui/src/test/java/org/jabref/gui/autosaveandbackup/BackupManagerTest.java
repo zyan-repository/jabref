@@ -136,7 +136,7 @@ class BackupManagerTest {
         Path backupDir = customDir.resolve("subBackupDir");
         Files.createDirectories(backupDir);
 
-        BibDatabaseContext databaseContext = new BibDatabaseContext(new BibDatabase());
+        BibDatabaseContext databaseContext = new BibDatabaseContext.Builder().withDatabase(new BibDatabase()).build();
         databaseContext.setDatabasePath(customDir.resolve("Bibfile.bib"));
 
         CliPreferences preferences = mock(CliPreferences.class, Answers.RETURNS_DEEP_STUBS);
@@ -164,7 +164,7 @@ class BackupManagerTest {
         Path backupDir = customDir.resolve("subBackupDir");
         Files.createDirectories(backupDir);
 
-        BibDatabaseContext databaseContext = new BibDatabaseContext(new BibDatabase());
+        BibDatabaseContext databaseContext = new BibDatabaseContext.Builder().withDatabase(new BibDatabase()).build();
         databaseContext.setDatabasePath(customDir.resolve("Bibfile.bib"));
 
         CliPreferences preferences = mock(CliPreferences.class, Answers.RETURNS_DEEP_STUBS);

@@ -76,7 +76,7 @@ public class AiChatTab extends EntryEditorTab {
     protected void bindToEntry(BibEntry entry) {
         previousBibEntry.ifPresent(previousBibEntry -> aiService.getChatHistoryService().closeChatHistoryForEntry(previousBibEntry));
         previousBibEntry = Optional.of(entry);
-        BibDatabaseContext bibDatabaseContext = stateManager.getActiveDatabase().orElse(new BibDatabaseContext());
+        BibDatabaseContext bibDatabaseContext = stateManager.getActiveDatabase().orElse(new BibDatabaseContext.Builder().build());
 
         if (!aiPreferences.getEnableAi()) {
             showPrivacyNotice(entry);
