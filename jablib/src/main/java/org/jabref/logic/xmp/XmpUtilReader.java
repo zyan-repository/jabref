@@ -113,7 +113,7 @@ public class XmpUtilReader {
             }
         });
 
-        result.forEach(entry -> entry.addFile(new LinkedFile("", path, "PDF")));
+        result.forEach(entry -> entry.addFile(LinkedFile.Factory.fromPath("", path, "PDF")));
 
         return result.stream().toList();
     }

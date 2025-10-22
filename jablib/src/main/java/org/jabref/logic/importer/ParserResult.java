@@ -143,7 +143,11 @@ public class ParserResult {
     }
 
     public BibDatabaseContext getDatabaseContext() {
-        return new BibDatabaseContext(database, metaData, file);
+        return new BibDatabaseContext.Builder()
+                .withDatabase(database)
+                .withMetaData(metaData)
+                .withPath(file)
+                .build();
     }
 
     public void setDatabaseContext(@NonNull BibDatabaseContext bibDatabaseContext) {

@@ -31,7 +31,7 @@ class CitationStyleGeneratorTest {
     private static final BibEntryTypesManager ENTRY_TYPES_MANAGER = new BibEntryTypesManager();
 
     private final BibEntry testEntry = TestEntry.getTestEntry();
-    private final BibDatabaseContext testEntryContext = new BibDatabaseContext(new BibDatabase(List.of(testEntry)));
+    private final BibDatabaseContext testEntryContext = new BibDatabaseContext.Builder().withDatabase(new BibDatabase(List.of(testEntry))).build();
 
     @Test
     void defaultCitation() {
@@ -241,7 +241,7 @@ class CitationStyleGeneratorTest {
                 .withField(StandardField.ADDRESS, "Somewhere");
 
         String expectedCitation = "[1]B. Smith, “An article,” J. Jones, Ed., Somewhere: Great Publisher, 2021, pp. 1–10.\n";
-        BibDatabaseContext bibDatabaseContext = new BibDatabaseContext(new BibDatabase(List.of(firstEntry, secondEntry)));
+        BibDatabaseContext bibDatabaseContext = new BibDatabaseContext.Builder().withDatabase(new BibDatabase(List.of(firstEntry, secondEntry))).build();
 
         String actualCitation = CitationStyleGenerator.generateBibliography(List.of(firstEntry), DEFAULT_STYLE, TEXT_OUTPUT_FORMAT, bibDatabaseContext, ENTRY_TYPES_MANAGER).getFirst();
         assertEquals(expectedCitation, actualCitation);
@@ -905,7 +905,7 @@ class CitationStyleGeneratorTest {
     @ParameterizedTest
     @MethodSource
     void doiFieldMapping(String expected, BibDatabaseMode mode, BibEntry entry, String cslFileName, CitationStyleOutputFormat outputFormat) {
-        BibDatabaseContext context = new BibDatabaseContext(new BibDatabase(List.of(entry)));
+        BibDatabaseContext context = new BibDatabaseContext.Builder().withDatabase(new BibDatabase(List.of(entry))).build();
         context.setMode(mode);
 
         String citation = CitationStyleGenerator.generateBibliography(

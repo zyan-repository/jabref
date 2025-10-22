@@ -18,7 +18,7 @@ class BibDatabaseDiffTest {
 
     @Test
     void compareOfEmptyDatabasesReportsNoDifferences() {
-        BibDatabaseDiff diff = BibDatabaseDiff.compare(new BibDatabaseContext(), new BibDatabaseContext());
+        BibDatabaseDiff diff = BibDatabaseDiff.compare(new BibDatabaseContext.Builder().build(), new BibDatabaseContext.Builder().build());
 
         assertEquals(Optional.empty(), diff.getPreambleDifferences());
         assertEquals(Optional.empty(), diff.getMetaDataDifferences());
@@ -96,8 +96,8 @@ class BibDatabaseDiffTest {
         BibEntry entryOne = new BibEntry(BibEntry.DEFAULT_TYPE).withField(StandardField.TITLE, "test");
         BibEntry entryTwo = new BibEntry(BibEntry.DEFAULT_TYPE).withField(StandardField.TITLE, "another test");
         BibEntry entryThree = new BibEntry(BibEntry.DEFAULT_TYPE).withField(StandardField.TITLE, "again another test");
-        BibDatabaseContext databaseOne = new BibDatabaseContext(new BibDatabase(List.of(entryOne)));
-        BibDatabaseContext databaseTwo = new BibDatabaseContext(new BibDatabase(Arrays.asList(entryTwo, entryThree)));
+        BibDatabaseContext databaseOne = new BibDatabaseContext.Builder().withDatabase(new BibDatabase(List.of(entryOne))).build();
+        BibDatabaseContext databaseTwo = new BibDatabaseContext.Builder().withDatabase(new BibDatabase(Arrays.asList(entryTwo, entryThree))).build();
 
         BibDatabaseDiff diff = BibDatabaseDiff.compare(databaseOne, databaseTwo);
 
@@ -135,8 +135,8 @@ class BibDatabaseDiffTest {
     }
 
     private BibDatabaseDiff compareEntries(BibEntry entryOne, BibEntry entryTwo) {
-        BibDatabaseContext databaseOne = new BibDatabaseContext(new BibDatabase(List.of(entryOne)));
-        BibDatabaseContext databaseTwo = new BibDatabaseContext(new BibDatabase(List.of(entryTwo)));
+        BibDatabaseContext databaseOne = new BibDatabaseContext.Builder().withDatabase(new BibDatabase(List.of(entryOne))).build();
+        BibDatabaseContext databaseTwo = new BibDatabaseContext.Builder().withDatabase(new BibDatabase(List.of(entryTwo))).build();
 
         return BibDatabaseDiff.compare(databaseOne, databaseTwo);
     }

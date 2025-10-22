@@ -40,7 +40,7 @@ class RenamePdfCleanupTest {
         this.testFolder = testFolder;
         Path path = testFolder.resolve("test.bib");
         MetaData metaData = new MetaData();
-        BibDatabaseContext context = new BibDatabaseContext(new BibDatabase(), metaData);
+        BibDatabaseContext context = new BibDatabaseContext.Builder().withDatabase(new BibDatabase()).withMetaData(metaData).build();
         context.setDatabasePath(path);
 
         entry = new BibEntry();
@@ -59,7 +59,7 @@ class RenamePdfCleanupTest {
         Path path = testFolder.resolve("toot.tmp");
         Files.createFile(path);
 
-        LinkedFile fileField = new LinkedFile("", path.toAbsolutePath(), "");
+        LinkedFile fileField = LinkedFile.Factory.fromPath("", path.toAbsolutePath(), "");
         entry.setField(StandardField.FILE, FileFieldWriter.getStringRepresentation(fileField));
 
         when(filePreferences.getFileNamePattern()).thenReturn("[citationkey]");
@@ -82,18 +82,18 @@ class RenamePdfCleanupTest {
         entry.setField(StandardField.TITLE, "test title");
         entry.setField(StandardField.FILE, FileFieldWriter.getStringRepresentation(
                 Arrays.asList(
-                        new LinkedFile("", Path.of(""), ""),
-                        new LinkedFile("", path.toAbsolutePath(), ""),
-                        new LinkedFile("", Path.of(""), ""))));
+                        LinkedFile.Factory.fromPath("", Path.of(""), ""),
+                        LinkedFile.Factory.fromPath("", path.toAbsolutePath(), ""),
+                        LinkedFile.Factory.fromPath("", Path.of(""), ""))));
 
         when(filePreferences.getFileNamePattern()).thenReturn("[citationkey] - [fulltitle]");
         cleanup.cleanup(entry);
 
         assertEquals(Optional.of(FileFieldWriter.getStringRepresentation(
                         Arrays.asList(
-                                new LinkedFile("", Path.of(""), ""),
-                                new LinkedFile("", Path.of("Toot - test title.tmp"), ""),
-                                new LinkedFile("", Path.of(""), "")))),
+                                LinkedFile.Factory.fromPath("", Path.of(""), ""),
+                                LinkedFile.Factory.fromPath("", Path.of("Toot - test title.tmp"), ""),
+                                LinkedFile.Factory.fromPath("", Path.of(""), "")))),
                 entry.getField(StandardField.FILE));
     }
 
@@ -102,14 +102,14 @@ class RenamePdfCleanupTest {
         Path path = testFolder.resolve("Toot.tmp");
         Files.createFile(path);
 
-        LinkedFile fileField = new LinkedFile("", path.toAbsolutePath(), "");
+        LinkedFile fileField = LinkedFile.Factory.fromPath("", path.toAbsolutePath(), "");
         entry.setField(StandardField.FILE, FileFieldWriter.getStringRepresentation(fileField));
         entry.setField(StandardField.TITLE, "test title");
 
         when(filePreferences.getFileNamePattern()).thenReturn("[citationkey] - [fulltitle]");
         cleanup.cleanup(entry);
 
-        LinkedFile newFileField = new LinkedFile("", Path.of("Toot - test title.tmp"), "");
+        LinkedFile newFileField = LinkedFile.Factory.fromPath("", Path.of("Toot - test title.tmp"), "");
         assertEquals(Optional.of(FileFieldWriter.getStringRepresentation(newFileField)), entry.getField(StandardField.FILE));
     }
 
@@ -117,14 +117,14 @@ class RenamePdfCleanupTest {
     void cleanupRenamePdfRenamesFileInSameFolder() throws IOException {
         Path path = testFolder.resolve("Toot.pdf");
         Files.createFile(path);
-        LinkedFile fileField = new LinkedFile("", Path.of("Toot.pdf"), "PDF");
+        LinkedFile fileField = LinkedFile.Factory.fromPath("", Path.of("Toot.pdf"), "PDF");
         entry.setField(StandardField.FILE, FileFieldWriter.getStringRepresentation(fileField));
         entry.setField(StandardField.TITLE, "test title");
 
         when(filePreferences.getFileNamePattern()).thenReturn("[citationkey] - [fulltitle]");
         cleanup.cleanup(entry);
 
-        LinkedFile newFileField = new LinkedFile("", Path.of("Toot - test title.pdf"), "PDF");
+        LinkedFile newFileField = LinkedFile.Factory.fromPath("", Path.of("Toot - test title.pdf"), "PDF");
         assertEquals(Optional.of(FileFieldWriter.getStringRepresentation(newFileField)), entry.getField(StandardField.FILE));
     }
 }

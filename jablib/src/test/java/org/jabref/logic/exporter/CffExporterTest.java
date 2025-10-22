@@ -39,7 +39,7 @@ class CffExporterTest {
     @BeforeAll
     static void setUp() {
         cffExporter = new CffExporter();
-        databaseContext = new BibDatabaseContext();
+        databaseContext = new BibDatabaseContext.Builder().build();
     }
 
     @Test
@@ -253,7 +253,7 @@ class CffExporterTest {
         CffImporter importer = new CffImporter(citationKeyPatternPreferences);
         Path file = Path.of(CffImporterTest.class.getResource("CITATION.cff").toURI());
         BibDatabase db = importer.importDatabase(file).getDatabase();
-        BibDatabaseContext dbc = new BibDatabaseContext(db);
+        BibDatabaseContext dbc = new BibDatabaseContext.Builder().withDatabase(db).build();
 
         // Then, export both entries that will be exported as one file
         Path out = tempDir.resolve("OUT.cff");

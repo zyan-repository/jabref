@@ -112,7 +112,7 @@ class LayoutEntryTest {
     void unsupportedOperationTypes(int type) {
         List<StringInt> parsedEntries = List.of(new StringInt("place_holder", 0),
                 new StringInt("testString", 0));
-        BibDatabaseContext bibDatabaseContext = new BibDatabaseContext(new BibDatabase(), new MetaData(), null);
+        BibDatabaseContext bibDatabaseContext = new BibDatabaseContext.Builder().withDatabase(new BibDatabase()).withMetaData(new MetaData()).build();
         LayoutEntry layoutEntry = new LayoutEntry(parsedEntries, type, null, null, null);
         assertThrows(UnsupportedOperationException.class, () -> layoutEntry.doLayout(bibDatabaseContext, StandardCharsets.UTF_8));
     }
@@ -128,7 +128,7 @@ class LayoutEntryTest {
     void layoutResult(int type, String expectedValue) {
         List<StringInt> parsedEntries = List.of(new StringInt("place_holder", 0),
                 new StringInt("testString", 0));
-        BibDatabaseContext bibDatabaseContext = new BibDatabaseContext(new BibDatabase(), new MetaData(), null);
+        BibDatabaseContext bibDatabaseContext = new BibDatabaseContext.Builder().withDatabase(new BibDatabase()).withMetaData(new MetaData()).build();
         LayoutEntry layoutEntry = new LayoutEntry(parsedEntries, type, null, null, null);
         assertEquals(expectedValue, layoutEntry.doLayout(bibDatabaseContext, StandardCharsets.UTF_8));
     }

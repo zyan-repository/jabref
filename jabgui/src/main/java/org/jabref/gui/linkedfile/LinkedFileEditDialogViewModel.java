@@ -170,12 +170,12 @@ public class LinkedFileEditDialogViewModel extends AbstractViewModel {
 
         if (LinkedFile.isOnlineLink(link.getValue())) {
             try {
-                return new LinkedFile(description.getValue(), URLUtil.create(link.getValue()), fileType, sourceUrl.getValue());
+                return LinkedFile.Factory.fromUrl(description.getValue(), URLUtil.create(link.getValue()), fileType, sourceUrl.getValue());
             } catch (MalformedURLException e) {
-                return new LinkedFile(description.getValue(), link.getValue(), fileType, sourceUrl.getValue());
+                return LinkedFile.Factory.fromString(description.getValue(), link.getValue(), fileType, sourceUrl.getValue());
             }
         }
-        return new LinkedFile(description.getValue(), Path.of(link.getValue()), fileType, sourceUrl.getValue());
+        return LinkedFile.Factory.fromPath(description.getValue(), Path.of(link.getValue()), fileType, sourceUrl.getValue());
     }
 
     private String relativize(Path filePath) {
