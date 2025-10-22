@@ -52,7 +52,7 @@ class FileFieldWriterTest {
 
     @Test
     void fileFieldWriterGetStringRepresentation() {
-        LinkedFile file = new LinkedFile("test", Path.of("X:\\Users\\abc.pdf"), "PDF");
+        LinkedFile file = LinkedFile.Factory.fromPath("test", Path.of("X:\\Users\\abc.pdf"), "PDF");
         assertEquals("test:X\\:/Users/abc.pdf:PDF", FileFieldWriter.getStringRepresentation(file));
     }
 }

@@ -30,7 +30,7 @@ class LinkedFileHandlerTest {
     @BeforeEach
     void setUp(@TempDir Path tempFolder) {
         entry = new BibEntry().withCitationKey("asdf");
-        databaseContext = new BibDatabaseContext();
+        databaseContext = new BibDatabaseContext.Builder().build();
 
         when(filePreferences.confirmDeleteLinkedFile()).thenReturn(true);
         when(preferences.getFilePreferences()).thenReturn(filePreferences);
@@ -51,7 +51,7 @@ class LinkedFileHandlerTest {
         final Path tempFile = tempFolder.resolve(originalFileName);
         Files.createFile(tempFile);
 
-        final LinkedFile linkedFile = new LinkedFile("", tempFile, "");
+        final LinkedFile linkedFile = LinkedFile.Factory.fromPath("", tempFile, "");
         LinkedFileHandler linkedFileHandler = new LinkedFileHandler(linkedFile, entry, databaseContext, filePreferences);
 
         linkedFileHandler.renameToName(newFileName, false);

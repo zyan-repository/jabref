@@ -21,7 +21,7 @@ class JabRefItemDataProviderTest {
                         .withCitationKey("key")
                         .withField(StandardField.AUTHOR, "Test Author")
         ));
-        BibDatabaseContext bibDatabaseContext = new BibDatabaseContext(bibDatabase);
+        BibDatabaseContext bibDatabaseContext = new BibDatabaseContext.Builder().withDatabase(bibDatabase).build();
         JabRefItemDataProvider jabRefItemDataProvider = new JabRefItemDataProvider();
         jabRefItemDataProvider.setData(bibDatabaseContext, new BibEntryTypesManager());
         assertEquals("""
@@ -39,7 +39,7 @@ class JabRefItemDataProviderTest {
                         .withCitationKey("key2")
                         .withField(StandardField.AUTHOR, "Second Author")
         ));
-        BibDatabaseContext bibDatabaseContext = new BibDatabaseContext(bibDatabase);
+        BibDatabaseContext bibDatabaseContext = new BibDatabaseContext.Builder().withDatabase(bibDatabase).build();
         JabRefItemDataProvider jabRefItemDataProvider = new JabRefItemDataProvider();
         jabRefItemDataProvider.setData(bibDatabaseContext, new BibEntryTypesManager());
         assertEquals("""

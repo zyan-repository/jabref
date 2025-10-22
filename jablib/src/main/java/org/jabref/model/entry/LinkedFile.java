@@ -39,7 +39,7 @@ public class LinkedFile implements Serializable {
     private static final String REGEX_URL = "^((?:https?\\:\\/\\/|www\\.)(?:[-a-z0-9]+\\.)*[-a-z0-9]+.*)";
     private static final Pattern URL_PATTERN = Pattern.compile(REGEX_URL);
 
-    private static final LinkedFile NULL_OBJECT = new LinkedFile("", Path.of(""), "");
+    private static final LinkedFile NULL_OBJECT = Factory.fromString("", "", "");
 
     // We have to mark these properties as transient because they can't be serialized directly
     private transient StringProperty description = new SimpleStringProperty();
@@ -49,49 +49,126 @@ public class LinkedFile implements Serializable {
     private transient StringProperty fileType = new SimpleStringProperty();
     private transient StringProperty sourceURL = new SimpleStringProperty();
 
-    public LinkedFile(String description, Path link, String fileType) {
-        this(description, link.toString(), fileType);
-    }
-
-    public LinkedFile(String description, Path link, String fileType, String sourceUrl) {
-        this(description, link.toString(), fileType, sourceUrl);
-    }
-
-    public LinkedFile(String description, String link, FileType fileType) {
-        this(description, link, fileType.getName());
-    }
-
-    /**
-     * Constructor can also be used for non-valid paths. We need to parse them, because the GUI needs to render it.
-     */
-    public LinkedFile(String description, String link, String fileType, String sourceUrl) {
+    private LinkedFile(String description, String link, String fileType, String sourceUrl) {
         this.description.setValue(description);
         setLink(link);
         this.fileType.setValue(fileType);
         this.sourceURL.setValue(sourceUrl);
     }
 
-    public LinkedFile(String description, String link, String fileType) {
-        this(description, link, fileType, "");
-    }
-
-    public LinkedFile(URL link, String fileType) {
-        this("", link.toString(), fileType);
-    }
-
-    public LinkedFile(String description, URL link, String fileType) {
-        this(description, link.toString(), fileType);
-    }
-
-    public LinkedFile(String description, URL link, String fileType, String sourceUrl) {
-        this(description, link.toString(), fileType, sourceUrl);
-    }
-
     /**
-     * Constructs a new LinkedFile with an empty file type and an empty description
+     * Factory for creating {@link LinkedFile} instances from various sources.
+     * This class provides static methods to ensure consistent object creation.
      */
-    public LinkedFile(Path link) {
-        this("", link, "");
+    public static class Factory {
+
+        /**
+         * Creates a {@link LinkedFile} from a {@link Path}.
+         *
+         * @param description The file description.
+         * @param link        The {@link Path} to the file.
+         * @param fileType    The string representation of the file type.
+         * @return A new {@link LinkedFile} instance.
+         */
+        public static LinkedFile fromPath(String description, Path link, String fileType) {
+            return new LinkedFile(description, link.toString(), fileType, "");
+        }
+
+        /**
+         * Creates a {@link LinkedFile} from a {@link Path}, including a source URL.
+         *
+         * @param description The file description.
+         * @param link        The {@link Path} to the file.
+         * @param fileType    The string representation of the file type.
+         * @param sourceUrl   The source URL of the file.
+         * @return A new {@link LinkedFile} instance.
+         */
+        public static LinkedFile fromPath(String description, Path link, String fileType, String sourceUrl) {
+            return new LinkedFile(description, link.toString(), fileType, sourceUrl);
+        }
+
+        /**
+         * Creates a {@link LinkedFile} from a {@link Path} with an empty description and file type.
+         *
+         * @param link The {@link Path} to the file.
+         * @return A new {@link LinkedFile} instance.
+         */
+        public static LinkedFile fromPath(Path link) {
+            return new LinkedFile("", link.toString(), "", "");
+        }
+
+        /**
+         * Creates a {@link LinkedFile} from a string link and a {@link FileType} enum.
+         *
+         * @param description The file description.
+         * @param link        The string representation of the link.
+         * @param fileType    The {@link FileType} enum.
+         * @return A new {@link LinkedFile} instance.
+         */
+        public static LinkedFile fromFileType(String description, String link, FileType fileType) {
+            return new LinkedFile(description, link, fileType.getName(), "");
+        }
+
+        /**
+         * Creates a {@link LinkedFile} from string components, including a source URL.
+         *
+         * @param description The file description.
+         * @param link        The string representation of the link.
+         * @param fileType    The string representation of the file type.
+         * @param sourceUrl   The source URL of the file.
+         * @return A new {@link LinkedFile} instance.
+         */
+        public static LinkedFile fromString(String description, String link, String fileType, String sourceUrl) {
+            return new LinkedFile(description, link, fileType, sourceUrl);
+        }
+
+        /**
+         * Creates a {@link LinkedFile} from string components.
+         *
+         * @param description The file description.
+         * @param link        The string representation of the link.
+         * @param fileType    The string representation of the file type.
+         * @return A new {@link LinkedFile} instance.
+         */
+        public static LinkedFile fromString(String description, String link, String fileType) {
+            return new LinkedFile(description, link, fileType, "");
+        }
+
+        /**
+         * Creates a {@link LinkedFile} from a {@link URL} with an empty description.
+         *
+         * @param link     The {@link URL} of the file.
+         * @param fileType The string representation of the file type.
+         * @return A new {@link LinkedFile} instance.
+         */
+        public static LinkedFile fromUrl(URL link, String fileType) {
+            return new LinkedFile("", link.toString(), fileType, "");
+        }
+
+        /**
+         * Creates a {@link LinkedFile} from a {@link URL}.
+         *
+         * @param description The file description.
+         * @param link        The {@link URL} of the file.
+         * @param fileType    The string representation of the file type.
+         * @return A new {@link LinkedFile} instance.
+         */
+        public static LinkedFile fromUrl(String description, URL link, String fileType) {
+            return new LinkedFile(description, link.toString(), fileType, "");
+        }
+
+        /**
+         * Creates a {@link LinkedFile} from a {@link URL}, including a source URL.
+         *
+         * @param description The file description.
+         * @param link        The {@link URL} of the file.
+         * @param fileType    The string representation of the file type.
+         * @param sourceUrl   The source URL of the file.
+         * @return A new {@link LinkedFile} instance.
+         */
+        public static LinkedFile fromUrl(String description, URL link, String fileType, String sourceUrl) {
+            return new LinkedFile(description, link.toString(), fileType, sourceUrl);
+        }
     }
 
     public StringProperty descriptionProperty() {
