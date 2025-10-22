@@ -24,6 +24,8 @@ plugins {
 
     id("net.ltgt.errorprone") version "4.3.0"
     id("net.ltgt.nullaway") version "2.3.0"
+
+    id("com.github.spotbugs") version "6.4.2"
 }
 
 var version: String = project.findProperty("projVersion")?.toString() ?: "0.1.0"
@@ -594,4 +596,15 @@ javaModuleTesting.whitebox(testing.suites["test"]) {
 
     requires.add("com.tngtech.archunit")
     requires.add("com.tngtech.archunit.junit5.api")
+}
+
+tasks.withType(com.github.spotbugs.snom.SpotBugsTask::class).configureEach {
+    reports {
+        create("html") {
+            required.set(true)
+        }
+        create("text") {
+            required.set(false)
+        }
+    }
 }

@@ -4,6 +4,8 @@ plugins {
 
     // Do not activate; causes issues with the modularity plugin (no tests found etc)
     // id("com.redock.classpathtofile") version "0.1.0"
+
+    id("com.github.spotbugs") version "6.4.2"
 }
 
 group = "org.jabref"
@@ -244,4 +246,15 @@ tasks.test {
         // "--add-reads", "org.mockito=java.prefs",
         // "--add-reads", "org.jabref=wiremock"
     )
+}
+
+tasks.withType(com.github.spotbugs.snom.SpotBugsTask::class).configureEach {
+    reports {
+        create("html") {
+            required.set(true)
+        }
+        create("text") {
+            required.set(false)
+        }
+    }
 }
